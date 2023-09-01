@@ -2,7 +2,7 @@
 #include<math.h>
 using namespace std;
 
-//                                           Binary to Decimal Conversion
+//                                          Binary to Decimal Conversion
 /*
 int main()
 {
