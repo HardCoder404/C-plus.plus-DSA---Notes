@@ -1,0 +1,306 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+//                                                      Graph 
+/* 
+ek graph hamra dikhne me asa hota hai...simple visualizzation 
+
+                            O--------O
+                            |          \                                        --   edges     
+                            |           O                                       O    nodes  
+                            |          /
+                            O--------O
+//                           (pic.A)
+
+//     so,  WHat is Graph ?? 
+//         Basically it is a type of data structure which is a combination of nodes and edges.  
+
+
+// ab agar mai types of Graph ki baat kru toh uske lie..mujhe ek graph bnana pdega...lets see..
+
+
+                            O------->O
+                            |     /  ^                                        -->  directed edges     
+                            |   /    |                                        O    nodes  
+                            v /      |
+                            O------->O
+//                            (pic.B)
+
+
+// so ,       Graph are of two types : 
+//       1. Undirected graph (pic.A)  --    disme direction na ho wo Undirected 
+//       2. directed graph   (pic.B)  -->   or jisme direction ho wo directed graph,simple 
+
+
+
+NOTE: //       jse pic.A ki baat kru toh..manlo first node ko maine a bol dia or second node ko b toh..yha a or b k bich m ek edge hai 
+//             or or or b or a k bich me v ek edge hai ...
+//         but,,,
+//            as in pic.B manlo ek node ko maine x bol dia or dusre node ko maine y bol dia toh...yha x or y k bich me ek edge hai...
+//          lekin y or x k bich m ek v edge nahi h qki...ye directed h ...x-->y eseli..lekin upper Undirected m asa kuch nahi tha 
+//             eslie wha possible hoopya a--b or b--a. (mtb mai a se b ki trf v jaskta hu or b se a ki trf v ..both are possibel) 
+
+
+
+
+ab mainne pocha bhyia...NODE kya hota hai ???
+// to Node ek trike ka ..entity hota h jo ki..Basically data store krta hai...kisi v type ka...(int,char) 
+
+// edges: connections hai ...for nodes 
+
+
+
+
+
+
+                            U--------V
+                            |        | \                                        --   edges     
+                            |        |  Z                                       O    nodes  
+                            |        | /
+                            X--------Y
+
+
+
+
+NOw,..lets understand some more terms: 
+
+Degree: // eska mtlb hai ki..ek node se kitni edges connected hai ....
+//         for ex: lets say ...(V)  ab V se (U) bhi connected hai V se (Y) v connected hai or V se (Z) v connected hai 
+//           to (V) ki Degree--> 3 aagyiii....
+//          same : for (U) --> 2     (X) -->2    (Y) --> 3    (Z) --> 2 
+
+
+
+
+
+                            A------->B
+                            |     /  ^                                        -->  directed edges     
+                            |   /    |                                         O    nodes  
+                            v /      |
+                            C------->D
+
+
+In Directed Graph: 
+(i)  Indegree  : // eska mtlb..kitni edges meri trff aari hai...
+//               for ex: (B) lelo ,ab B ki trg total teen edes ari hai...toh eski indegree --> 3 hogyi..
+//               same : (C) --> 1     (D) --> 1  (A) --> 0 
+
+(ii) Outdegree :  // eska mtlb..kitni edges mere se door jari hai...
+//               for ex: (B) lelo ,ab B se ek v edge door ni jari  hai...toh eski Outdegree --> 0 hogya..
+//               same : (C) --> 1     (D) --> 1  (A) --> 2 
+
+
+
+
+
+
+
+
+ab baat aati hai >>>> Weighted Graph: 
+// eska mtlb hai ki...kisi v edge p kuch numbers dale hue hai.whi unka Weight hogya....
+
+                                5
+                            U--------V
+                            |        | \6                                       --   edges     
+                          2 |        |  Z                                       O    nodes  
+                            |        | /8
+                            X--------Y
+                                0
+
+
+// yha savi edges par kuch Weight dale hue h mtlb ki number...whi Weighted graph hote hai...
+// jse U ---> V k bich m jo edges hai uska Weight kitna hia..uska Weight 5 hai ...
+// same: U--->X = 2           X--->Y =0        Y---Z = 8        V--->Z = 6    
+
+
+
+
+
+NOTE: agar kisi case me apke pas Weight nahi derakha..lkn apko asi algorithm lgaani h jha par Weights ki need h toh us case me hum assume
+    karlete hai..ki savi pe Weight --> 1 hai. 
+    
+    
+    
+    
+    
+
+//   Weighted Directed graph :   jispe Weight v ho..or direction v ho edges ka 
+//   Weighted Undirected graph : jispe Weighted toh ho ...lkn direction nahi ho edges ka 
+    
+
+
+
+
+
+
+Path : // sequence of node, jisme ki apka node exactly ek bar hi ata hai ...
+
+
+                            U--------V
+                            |        | \                                        --   edges     
+                            |        |  Z                                       O    nodes  
+                            |        | /
+                            X--------Y
+
+// example : U--V--Z       V--Z--Y       X--Y--V--U  toh ye sab ek path hai ..or ensab me har node ek hi bar aara hai..this is what it is.
+
+
+
+Cyclic Graph : // agar aap ek asi node pe aachuke hai..jo ki already ek exist kr chuki hai mtlb ki aap Cyclic graph me hai ....
+
+
+                            U<-------V
+                            |        ^                                         --   edges     
+                            |        |                                         O    nodes  
+                            v        | 
+                            X------->Y
+
+
+//        U -->X-->Y-->V-->U          so this is Cyclic graph 
+
+
+
+Acylic Graph : // jisme ki cycle form na hori ho....
+
+                            U------->V
+                            |        ^                                         --   edges     
+                            |        |                                         O    nodes  
+                            v        | 
+                            X------->Y
+        
+
+
+//  dhyn se dekho tooh esme..cycle nahi ban ri ....U-->X-->Y-->V      U-->V   
+
+
+
+
+
+
+
+
+
+
+ab,baat aati hai ...Graph ko represent kaise kre??? mtlb bhyia...mtllb ki mre pas kya kya representation hai..us graph ko implement krne ki...
+// toh esme do chize aati hai ...hum endono mese koi sa v use krk problem solve krskte hia ....
+
+1.  Adjacency Matrix :  
+2.  Adjacency List : 
+
+
+// input format me apko teen chize milenge: 
+1. number of nodes  (N)
+2. number of edges  (M) 
+3. list of  edges(mtlb ki kya kya data h edges ki,kon kis se connected hai .ye sab)
+
+
+//suppose: N=3 M=3 or edges :  0-->1   1-->2   2-->0     (given)  
+
+            0 
+           / ^
+          /   \
+         v     \
+        1------>2
+
+ 
+
+// Adjacency Matrix ke case me apko ek 2D Matrix banani hoti hai...jisme kii...indexes nodes ko darsati hai 
+
+/*           0 1 2            
+
+0            0 1 0                            to ess prakar..apne 2D Matrix ka use krk..grpah ko darsha dia...jisme ki har ek edes exits krti
+1            0 0 1                            hai ki nahi uske base pr bta dia..agar krti hia toh (1) nahi toh (0)  
+2            1 0 0 
+
+*/
+/*
+space complexity : O(N^2)   
+
+
+
+
+
+//  Adjacency list ke case m kya hota h ki...esme aap sari nodes list krlete ho..mtlb ki kon kon si node hia..phir uske baad har ek node k lie
+//  uska conncection check krlete ho..ki ye particular node kis kis se connected h wo ek sath likh do..lets see....
+
+suppose, N=3 M=3 edges : 0--1--2--3--4--0 (Undirected graph)       gieven: 
+
+
+                            0--------1
+                            |        | \                                        --   edges     
+                            |        |  2                                       O    nodes  
+                            |        | /
+                            4--------3
+
+0 -->  1,4 
+1 -->  0,2,3
+2 -->  1,3                                   //  esko hi mai bolta hu...Adjacency list  or eske dwara mai apne graph ko darshata hu 
+3 -->  1,2,4 
+4 -->  0,3 
+
+
+
+implementation:                       map<(datatype),list<(datatype)>>ans; 
+// ex:                                map<int,list<int>> ans;
+
+
+
+
+*/
+
+//                                  CODE  
+
+class graph{
+    
+  public: 
+  
+    unordered_map<int,list<int>>adj;
+    
+    void addEdge(int u,int v,bool direction){
+        //  direction = 0 --> Undirected 
+        //  direction = 1 --> directed 
+        
+        // crete an edges from u to v 
+        adj[u].push_back(v);
+        
+          if(direction==0){
+              adj[v].push_back(u);
+          }
+    }
+  
+    void printAdjList(){
+        for(auto i:adj){
+            cout<<i.first<<"--> ";
+            for(auto j:i.second) {
+                cout<<j<<", ";
+            }
+            cout<<endl;
+        }
+    }
+  
+};
+
+int main(){
+    
+    int n;
+    cout<<"Enter the number of nodes: ";
+    cin>>n;
+    
+    int m;
+    cout<<"Enter the number of edges: ";
+    cin>>m;
+    
+    graph g;
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+        // creating an Undirected grpah 
+        g.addEdge(u,v,0);
+    }
+    
+    // printing graph 
+    g.printAdjList();
+    
+    return 0;
+}
